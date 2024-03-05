@@ -1,7 +1,5 @@
-
 const apiKey = '1587159bb0692bc32c752afb5ebd8948';
 let city;
-// check for stored history and initialize it
 let historicCities = JSON.parse(localStorage.getItem('historicCities')) || [];
 
 getUserLocationAndWeather();
@@ -21,46 +19,37 @@ function getUserLocationAndWeather() {
 
 async function getWeather() {
 	city = document.getElementById('city').value;
-	historicCities.push(city);
 	const response = await axios.get(
 		`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
-	)
-
-	document.getElementById('temperature').innerHTML = `${response.data.main.temp}°C`;
-	document.getElementById('description').innerHTML = `${response.data.weather[0].description}`
-	document.getElementById('humidity').innerHTML = `${response.data.main.humidity}%`
-	document.getElementById('wind').innerHTML = `${response.data.wind.speed}m/s`
-	document.getElementById('icon').src = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`;
-
-	// Saving the city to historicCities array and updating the history on the page
-
+	);
+	setWeatherData(response.data);
 	historicCities.push(city);
-	document.getElementById('history').innerHTML = historicCities.join('<br>');
-	// Save the historicCities array to local storage
 	localStorage.setItem('historicCities', JSON.stringify(historicCities));
-
+	updateHistory();
 }
 
 async function getWeatherByCoordinates(lat, lon) {
-	const response = await axios.get(
+	const { data } = await axios.get(
 		`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
 	);
 
-	// console.log(response);
-
-	document.getElementById('temperature').innerHTML = `${response.data.main.temp}°C`;
-	document.getElementById('description').innerHTML = `${response.data.weather[0].description}`;
-	document.getElementById('humidity').innerHTML = `${response.data.main.humidity}%`;
-	document.getElementById('wind').innerHTML = `${response.data.wind.speed}m/s`;
-	document.getElementById('icon').src = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`;
-
-	// Saving the city to historicCities array and updating the history on the page
-	const city = response.data.name;
-	historicCities.push(city);
-	document.getElementById('history').innerHTML = historicCities.join('<br>');
-
-	// Save the historicCities array to local storage
+	setWeatherData(data);
+	historicCities.push(data.name);
 	localStorage.setItem('historicCities', JSON.stringify(historicCities));
+	updateHistory();
+}
+
+function setWeatherData(data) {
+	const celsius = `${data.main.temp}°C`;
+	document.getElementById('temperature').innerHTML = celsius;
+	document.getElementById('description').innerHTML = data.weather[0].description;
+	document.getElementById('humidity').innerHTML = `${data.main.humidity}%`;
+	document.getElementById('wind').innerHTML = `${data.wind.speed}m/s`;
+	document.getElementById('icon').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+}
+
+function updateHistory() {
+	document.getElementById('history').innerHTML = historicCities.join('<br>');
 }
 
 function getUserCoordinates() {

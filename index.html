@@ -5,10 +5,63 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<title>APIs</title>
+		<style>
+			body {
+				font-family: "Arial", sans-serif;
+				background-color: #f4f4f4;
+				margin: 0;
+				padding: 20px;
+				color: #333;
+			}
+
+			#city {
+				padding: 10px;
+				margin-bottom: 10px;
+			}
+
+			button {
+				padding: 10px 20px;
+				background-color: #007bff;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+
+			button:hover {
+				background-color: #0056b3;
+			}
+
+			#weather {
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				background-color: white;
+				padding: 20px;
+				border-radius: 10px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				margin-bottom: 20px;
+			}
+
+			#weather p {
+				margin: 10px 0;
+			}
+
+			#icon {
+				width: 100px;
+			}
+
+			#history {
+				background-color: #e9ecef;
+				padding: 10px;
+				border-radius: 5px;
+			}
+		</style>
 	</head>
 	<body>
 		<input type="text" name="city" id="city" />
 		<button onclick="getWeather()" type="submit">Submit</button>
+		<button onclick="clearHistory()" type="submit">Clear History</button>
 		<div>
 			<div id="weather">
 				<p id="temperature"></p>
